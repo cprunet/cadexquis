@@ -50,13 +50,69 @@
     <Item Template="QtResourceProjectFolder">
       <QtResourceProjectFolder Name="Resources">
         <Properties />
-        <Items />
+        <Items>
+          <Item Template="QtResourceFile">
+            <QtResourceFile FileName="itakeit.png">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
+            <QtResourceFile FileName="upload.png">
+              <Properties>
+                <BuildAction value="Compile" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+        </Items>
+      </QtResourceProjectFolder>
+    </Item>
+    <Item Template="QtResourceProjectFolder">
+      <QtResourceProjectFolder Name="Tools">
+        <Properties />
+        <Items>
+          <Item Template="QtResourceFile">
+            <QtResourceFile FileName="Tools.js">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+        </Items>
       </QtResourceProjectFolder>
     </Item>
     <Item Template="QtResourceProjectFolder">
       <QtResourceProjectFolder Name="Views">
         <Properties />
         <Items>
+          <Item Template="QtResourceFile">
+            <QtResourceFile FileName="CadexquisConfiguration.qml">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
+            <QtResourceFile FileName="CadexquisConfiguration.qml">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
           <Item Template="QtResourceFile">
             <QtResourceFile FileName="main.qml">
               <Properties>
@@ -78,9 +134,11 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
-            <QtResourceFile FileName="CadexquisConfiguration.qml">
+            <QtResourceFile FileName="CxButton.qml">
               <Properties>
                 <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
               </Properties>
               <Items />
             </QtResourceFile>
