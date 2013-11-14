@@ -11,3 +11,5 @@
 *.lai
 *.la
 *.a
+
+Cadexquis.Debug.generated.qrc
