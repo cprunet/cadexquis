@@ -3,6 +3,6 @@ OTHER_FILES += \
     Views/main.qml \
     Views/mainPresenter.js \
     Views/CadexquisConfiguration.qml \
-    Tools/Tools.js
+    Tools/Tools.js \
     Views/CxButton.qml
    
