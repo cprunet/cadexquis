@@ -4,5 +4,6 @@ OTHER_FILES += \
     Views/mainPresenter.js \
     Views/CadexquisConfiguration.qml \
     Tools/Tools.js \
-    Views/CxButton.qml
+    Views/CxButton.qml \
+    Views/SplashScreen.qml
    

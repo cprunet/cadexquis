@@ -65,6 +65,16 @@
             <QtResourceFile FileName="upload.png">
               <Properties>
                 <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
+            <QtResourceFile FileName="release.png">
+              <Properties>
+                <BuildAction value="Compile" />
               </Properties>
               <Items />
             </QtResourceFile>
@@ -114,6 +124,16 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
+            <QtResourceFile FileName="CxButton.qml">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
             <QtResourceFile FileName="main.qml">
               <Properties>
                 <BuildAction value="Compile" />
@@ -134,7 +154,7 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
-            <QtResourceFile FileName="CxButton.qml">
+            <QtResourceFile FileName="SplashScreen.qml">
               <Properties>
                 <BuildAction value="Compile" />
                 <Locale value="" />

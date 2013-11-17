@@ -7,6 +7,8 @@ ZcAppConfigurationView
     width: 600
     height: 480
 
+    id : mainView
+
     // Labels
     Column
     {
@@ -52,6 +54,15 @@ ZcAppConfigurationView
             color           : "white"
             text            : "Row number"
         }
+
+        Label
+        {
+            font.pixelSize  : 24
+            height:         30
+            anchors.right   : columnLabelId.right
+            color           : "white"
+            text            : "Master nickname"
+        }
     }
 
     Button
@@ -67,8 +78,12 @@ ZcAppConfigurationView
 
         onClicked   :
         {
-//            mainView.dataFormConfiguration.setFieldValue("HomeUrl",textEdit.text);
-//            mainView.ok();
+            mainView.dataFormConfiguration.setFieldValue("PictureWidth",imageWidth.text);
+            mainView.dataFormConfiguration.setFieldValue("PictureHeight",imageHeight.text);
+            mainView.dataFormConfiguration.setFieldValue("NumberOfColumn",columnNumber.text);
+            mainView.dataFormConfiguration.setFieldValue("NumberOfRow",rowNumber.text);
+            mainView.dataFormConfiguration.setFieldValue("MasterNickname",masterNickname.text);
+            mainView.ok();
         }
 
     }
@@ -129,10 +144,25 @@ ZcAppConfigurationView
             focus            : true
         }
 
+        TextField
+        {
+            id                  : masterNickname
+
+            height:         30
+            font.pixelSize  : 24
+            anchors.right       : parent.right
+            anchors.left        : parent.left
+            focus            : true
+        }
+
     }
 
     onLoaded :
     {
-     //   textEdit.text = mainView.dataFormConfiguration.getFieldValue("HomeUrl","")
+        imageWidth.text = mainView.dataFormConfiguration.getFieldValue("PictureWidth","")
+        imageHeight.text = mainView.dataFormConfiguration.getFieldValue("PictureHeight","")
+        columnNumber.text = mainView.dataFormConfiguration.getFieldValue("NumberOfColumn","")
+        rowNumber.text = mainView.dataFormConfiguration.getFieldValue("NumberOfRow","")
+        masterNickname.text = mainView.dataFormConfiguration.getFieldValue("MasterNickname","")
     }
 }

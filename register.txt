@@ -1,0 +1,12 @@
+<x xmlns='jabber:x:data'>
+	<field type='text-single' var='PictureWidth' label='PictureWidth'><value>10</value>
+	</field>
+	<field type='text-single' var='PictureHeight' label='PictureHeight'><value>10</value>
+	</field>
+	<field type='text-single' var='NumberOfColumn' label='NumberOfColumn'><value>10</value>
+	</field>
+	<field type='text-single' var='NumberOfRow' label='NumberOfRow'><value>10</value>
+	</field>
+	<field type='text-single' var='MasterNickname' label='MasterNickname'><value>???</value>
+	</field>
+</x>

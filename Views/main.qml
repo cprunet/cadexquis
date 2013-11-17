@@ -63,7 +63,6 @@ ZcAppView
     {
         var key = who + "|" + when + "|" + state  + "|" + fileName;
         ceDefinition.setItem(row + "_" + column , key   );
-
     }
 
     function keyToModel(pos,key)
@@ -84,6 +83,25 @@ ZcAppView
             fileName = items[3]
         }
 
+        // je calcul mon état
+        if (mainView.iAmFree && who === mainView.context.nickname)
+        {
+            mainView.iAmFree = false;
+            mainView.myBusyPosition = pos;
+        }
+        else if (mainView.myBusyPosition === pos && state === "free")
+        {
+            mainView.iAmFree = true;
+            mainView.myBusyPosition = "";
+        }
+        else if (mainView.myBusyPosition === pos && state === "done")
+        {
+            mainView.iAmFree = true;
+            mainView.myBusyPosition = "";
+        }
+
+
+        console.log(">> KETTOMODEL " + who)
         modelCE.setProperty(index, "who", who)
         modelCE.setProperty(index, "when", when)
         modelCE.setProperty(index, "fileName", fileName)
@@ -94,9 +112,9 @@ ZcAppView
 
     function fillModel()
     {
-        for ( var i = 0; i < 5 ; i++)
+        for ( var i = 0; i < mainView.nbrRow ; i++)
         {
-            for (var j = 0 ; j < 10 ; j++)
+            for (var j = 0 ; j < mainView.nbrColum ; j++)
             {
                 var row = i;
                 var column = j;
@@ -116,10 +134,25 @@ ZcAppView
                     fileName = items[3]
                 }
 
+                if (mainView.iAmFree && who === mainView.context.nickname)
+                {
+                    mainView.iAmFree = false;
+                    mainView.myBusyPosition = pos;
+                }
+
                 modelCE.append({ "row" : row, "column" : column , "pos" : pos  , "state" : state , "who" : who, "fileName"  : fileName, "when" : when});
             }
         }
     }
+
+
+    SplashScreen
+    {
+        id : splashScreenId
+        width : parent.width
+        height: parent.height
+    }
+
 
 
     FileDialog
@@ -190,11 +223,17 @@ ZcAppView
     property int nbrColum : 10
     property int nbrRow : 5
 
+    property string masterNickname : "???"
+
     property double realImageWidth : 5
     property double realImageHeight : 10
 
     property double currentImageWidth : primaryScreen.physicalDotsPerCmX(realImageWidth) * slider.value
     property double currentImageHeight : primaryScreen.physicalDotsPerCmY(realImageHeight) * slider.value
+
+    property bool iAmFree : true
+    property bool iAmTheMaster : false
+    property string myBusyPosition : ""
 
 
     ScrollView
@@ -283,13 +322,11 @@ ZcAppView
                                 StateChangeScript {
                                     script:
                                     {
-                                        upload.visible = false
                                         whoAndWhen.visible = true
-                                        takeForMe.visible = true
                                         background.color = "lightGreen"
                                         image.visible = false
-                                        whoLabel = ""
-                                        whenLabel = ""
+                                        whoLabel.text = ""
+                                        whenLabel.text = ""
                                     }}
                             },
                             State
@@ -299,15 +336,13 @@ ZcAppView
                                 StateChangeScript {
                                     script:
                                     {
-                                        upload.visible = true
                                         whoAndWhen.visible = true
-                                        takeForMe.visible = false
                                         background.color = "#c80216"
                                         image.visible = false
                                         console.log(">> WHO " + who)
                                         whoLabel.text = who
-                                        var date = new Date(when)
-                                        whenLabel.text = date.getDay() + "/" + date.getMonth() + "/" + date.getYear()
+                                        var whenSplit = when.split("/")
+                                        whenLabel.text = whenSplit[0] + "/" + whenSplit[1] + "/" + whenSplit[2]
                                     }}
                             }
                             ,
@@ -318,9 +353,7 @@ ZcAppView
                                 StateChangeScript {
                                     script:
                                     {
-                                        upload.visible = false
                                         whoAndWhen.visible = false
-                                        takeForMe.visible = false
                                         background.color = "#00000000"
                                         image.source = "";
                                         image.source = documentFolder.getUrl(model.fileName);
@@ -389,33 +422,60 @@ ZcAppView
                             anchors.centerIn: parent
                             width : 92
                             height: 35
-                            visible : false
+                            visible : delegateCadexquis.state === "free" && mainView.iAmFree
 
                             imageSource: "qrc:/Cadexquis/Resources/itakeit.png"
 
                             onClicked:
                             {
                                 var date = new Date();
-                                mainView.modelToKey(model.row,model.column,mainView.context.nickname,date,"inprogress","");
+                                mainView.modelToKey(model.row,model.column,mainView.context.nickname,date.getDate() + "/" + date.getMonth() + "/" + date.getUTCFullYear(),"inprogress","");
                             }
                         }
 
 
-                        CxButton
+                        Column
                         {
-                            id : upload
-                            anchors.centerIn: parent
+                            id : uploadRelease
+
                             width : 92
-                            height: 35
-                            imageSource: "qrc:/Cadexquis/Resources/upload.png"
+                            height: 75
 
-                            visible : false
+                            anchors.centerIn: parent
 
-                            onClicked:
+                            visible : delegateCadexquis.state === "inprogress" && model.who === mainView.context.nickname
+
+
+                            spacing: 5
+
+                            CxButton
                             {
-                                fileDialog.currentItem = delegateCadexquis
-                                fileDialog.open();
+                                id : upload
+                                width : parent.width
+                                height: 35
+                                imageSource: "qrc:/Cadexquis/Resources/upload.png"
 
+
+                                onClicked:
+                                {
+                                    fileDialog.currentItem = delegateCadexquis
+                                    fileDialog.open();
+
+                                }
+                            }
+
+                            CxButton
+                            {
+                                id : release
+                                width : parent.width
+                                height: 35
+                                imageSource: "qrc:/Cadexquis/Resources/release.png"
+
+
+                                onClicked:
+                                {
+                                    mainView.modelToKey(model.row,model.column,"","","free","")
+                                }
                             }
                         }
                     }
@@ -424,13 +484,6 @@ ZcAppView
             }
         }
     }
-
-    //    SplashScreen
-    //    {
-    //        id : splashScreenId
-    //        width : parent.width
-    //        height: parent.height
-    //    }
 
 
     Component
@@ -453,7 +506,6 @@ ZcAppView
     }
 
 
-
     ZcCrowdActivity
     {
         id : activity
@@ -474,6 +526,10 @@ ZcAppView
 
                 onCompleted :
                 {
+                    splashScreenId.height = 0;
+                    splashScreenId.width = 0;
+                    splashScreenId.visible = false;
+
                     mainView.fillModel();
                 }
             }
@@ -518,6 +574,18 @@ ZcAppView
 
         onStarted :
         {
+            mainView.nbrColum = parseInt(mainView.context.applicationConfiguration.getProperty("NumberOfColumn","2"));
+            mainView.nbrRow = parseInt(mainView.context.applicationConfiguration.getProperty("NumberOfRow","2"));
+            mainView.realImageWidth = parseFloat(mainView.context.applicationConfiguration.getProperty("PictureWidth","2"));
+            mainView.realImageHeight = parseFloat(mainView.context.applicationConfiguration.getProperty("PictureHeight","2"));
+            mainView.masterNickname = mainView.context.applicationConfiguration.getProperty("PictureHeight","???");
+
+
+            if (mainView.masterNickname === mainView.context.nickname)
+            {
+                mainView.iAmTheMaster = true
+            }
+
             ceDefinition.loadItems(ceDefinitionQueryStatus);
         }
 
