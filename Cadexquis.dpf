@@ -90,6 +90,23 @@
       </QtResourceProjectFolder>
     </Item>
     <Item Template="QtResourceProjectFolder">
+      <QtResourceProjectFolder Name="Tools">
+        <Properties />
+        <Items>
+          <Item Template="QtResourceFile">
+            <QtResourceFile FileName="Tools.js">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+        </Items>
+      </QtResourceProjectFolder>
+    </Item>
+    <Item Template="QtResourceProjectFolder">
       <QtResourceProjectFolder Name="Views">
         <Properties />
         <Items>
@@ -114,7 +131,6 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
-            <QtResourceFile FileName="main.qml">
               <Properties>
                 <BuildAction value="Compile" />
                 <Locale value="" />
@@ -134,7 +150,7 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
-            <QtResourceFile FileName="CxButton.qml">
+            <QtResourceFile FileName="main.qml">
               <Properties>
                 <BuildAction value="Compile" />
                 <Locale value="" />
