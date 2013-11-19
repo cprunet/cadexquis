@@ -1,6 +1,17 @@
 .pragma library
 
 
+function findInListModel(listModel, findDelegate)
+{
+    for (var i=0;i<listModel.count;i++)
+    {
+        if ( findDelegate(listModel.get(i)) )
+            return listModel.get(i);
+    }
+
+    return null;
+}
+
 function getIndexInListModel(listModel, findDelegate)
 {
     for (var i=0;i<listModel.count;i++)

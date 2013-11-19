@@ -53,6 +53,35 @@ ZcAppView
         id : modelCE
     }
 
+    state : "gridview"
+
+    states :
+        [
+        State
+        {
+            name   : "gridview"
+
+            StateChangeScript {
+                script:
+                {
+                    gridView.visible = true;
+                    detailProgressView.visible = false
+                }}
+        }
+        ,
+        State
+        {
+            name   : "detailprogressview"
+
+            StateChangeScript {
+                script:
+                {
+                    gridView.visible = false;
+                    detailProgressView.visible = true
+                }}
+        }
+    ]
+
 
     Component.onCompleted:
     {
@@ -100,18 +129,25 @@ ZcAppView
             mainView.myBusyPosition = "";
         }
 
-
-        console.log(">> KETTOMODEL " + who)
         modelCE.setProperty(index, "who", who)
         modelCE.setProperty(index, "when", when)
         modelCE.setProperty(index, "fileName", fileName)
         modelCE.setProperty(index, "state", state)
+
+        if (state == "done")
+        {
+            var isFinished = true;
+            Tools.foreachInListModel(modelCE, function (x) { if (x.state !== "done") { isFinished = false}});
+            mainView.isFinished = isFinished;
+        }
     }
 
 
 
     function fillModel()
     {
+        var finished = true;
+
         for ( var i = 0; i < mainView.nbrRow ; i++)
         {
             for (var j = 0 ; j < mainView.nbrColum ; j++)
@@ -134,15 +170,23 @@ ZcAppView
                     fileName = items[3]
                 }
 
-                if (mainView.iAmFree && who === mainView.context.nickname)
+                if (mainView.iAmFree && who === mainView.context.nickname && state === "inprogress")
                 {
                     mainView.iAmFree = false;
                     mainView.myBusyPosition = pos;
                 }
 
+                if (state !== "done")
+                {
+                    finished = false;
+                }
+
+
                 modelCE.append({ "row" : row, "column" : column , "pos" : pos  , "state" : state , "who" : who, "fileName"  : fileName, "when" : when});
             }
         }
+
+        mainView.isFinished = finished;
     }
 
 
@@ -231,6 +275,7 @@ ZcAppView
     property double currentImageWidth : primaryScreen.physicalDotsPerCmX(realImageWidth) * slider.value
     property double currentImageHeight : primaryScreen.physicalDotsPerCmY(realImageHeight) * slider.value
 
+    property bool isFinished : false
     property bool iAmFree : true
     property bool iAmTheMaster : false
     property string myBusyPosition : ""
@@ -238,251 +283,161 @@ ZcAppView
 
     ScrollView
     {
+        id : gridView
+
         anchors.top : parent.top
         anchors.bottom : parent.bottom
         anchors.right : parent.right
         anchors.left : slider.right
 
-        Item
+
+        CadexisGrid
         {
+            id : cadexisGrid
 
             anchors.top: parent.top
-            anchors.right: parent.right
+            anchors.left: parent.left
+
             clip : true
+
             width : mainView.nbrColum * currentImageWidth
             height : mainView.nbrRow * currentImageHeight
 
-            GridView
+            model : modelCE
+
+            onShowDetailProgressView:
             {
-                anchors.fill: parent
+                mainView.state = "detailprogressview"
 
-                model : modelCE
+                var posUp = (row - 1)  + "_" + column;
+                var posDown = (row + 1) + "_" + column;
+                var posLeft = row  + "_" + (column - 1);
+                var posRight = row  + "_" + (column + 1);
 
-                cellHeight: currentImageHeight
-                cellWidth: currentImageWidth
+                var up = Tools.findInListModel( modelCE , function (x) { return x.pos === posUp});
+                var down = Tools.findInListModel( modelCE , function (x) { return x.pos === posDown});
+                var left = Tools.findInListModel( modelCE , function (x) { return x.pos === posLeft});
+                var right = Tools.findInListModel( modelCE , function (x) { return x.pos === posRight});
 
-
-                delegate : delegateId
-
-                Component
+                if ( up !== null )
                 {
-                    id : delegateId
-                    Rectangle
-                    {
-                        id : delegateCadexquis
+                    upId.source = documentFolder.getUrl(up.fileName);
+                }
 
-                        function onResourceProgress(query,value)
-                        {
-                            //   resourceViewer.progress = value;
-                        }
+                if ( down !== null)
+                {
+                    downId.source = documentFolder.getUrl(down.fileName);
+                }
 
-                        function onUploadCompleted(query)
-                        {
-                            query.progress.disconnect(onResourceProgress);
-                            query.completed.disconnect(onUploadCompleted);
-
-                            modelToKey(model.row,model.column,model.who,model.when,"done",model.fileName);
-                        }
-
-                        function importFile(fileName)
-                        {
-
-                            var index =  Tools.getIndexInListModel(modelCE, function (x) { return model.pos === x.pos})
-
-                            var query = zcStorageQueryStatusComponentId.createObject(mainView)
-                            query.progress.connect(onResourceProgress);
-                            query.completed.connect(onUploadCompleted);
-
-                            var name = mainView.context.nickname + "_" + model.pos + ".png";
-
-                            modelCE.setProperty(index, "fileName", name)
-
-                            return documentFolder.uploadFile(name,fileName,query);
-                        }
-
-
-                        Rectangle
-                        {
-                            id : background
-                            anchors.fill: parent
-                            opacity : 0.5
-                        }
-
-                        onStateChanged:
-                        {
-                        }
-
-
-                        states :
-                            [
-                            State
-                            {
-                                name   : "free"
-
-                                StateChangeScript {
-                                    script:
-                                    {
-                                        whoAndWhen.visible = true
-                                        background.color = "lightGreen"
-                                        image.visible = false
-                                        whoLabel.text = ""
-                                        whenLabel.text = ""
-                                    }}
-                            },
-                            State
-                            {
-                                name   : "inprogress"
-
-                                StateChangeScript {
-                                    script:
-                                    {
-                                        whoAndWhen.visible = true
-                                        background.color = "#c80216"
-                                        image.visible = false
-                                        console.log(">> WHO " + who)
-                                        whoLabel.text = who
-                                        var whenSplit = when.split("/")
-                                        whenLabel.text = whenSplit[0] + "/" + whenSplit[1] + "/" + whenSplit[2]
-                                    }}
-                            }
-                            ,
-                            State
-                            {
-                                name   : "done"
-
-                                StateChangeScript {
-                                    script:
-                                    {
-                                        whoAndWhen.visible = false
-                                        background.color = "#00000000"
-                                        image.source = "";
-                                        image.source = documentFolder.getUrl(model.fileName);
-                                        image.visible = true
-                                    }}
-                            }
-
-                        ]
-
-                        state : model.state
-
-                        clip : true
-                        height:  mainView.currentImageHeight
-                        width :  mainView.currentImageWidth
-
-                        color : (column + row) % 2 == 0 ? "grey" : "lightgrey"
-
-                        Image
-                        {
-                            id : image
-                            cache : false
-                            anchors.fill : parent
-                            width : 10
-                            height : 10
-
-                            visible : false
-                        }
-
-
-                        Column
-                        {
-
-                            id : whoAndWhen
-
-                            width : parent.width
-                            height : parent.height
-
-                            anchors.centerIn: parent
-
-                            Label
-                            {
-                                id : whoLabel
-                                anchors.right: parent.right
-                                anchors.left: parent.left
-                                font.pixelSize: 20
-                                horizontalAlignment: Text.AlignHCenter
-                                height : 25
-                            }
-
-                            Label
-                            {
-                                id : whenLabel
-                                anchors.right: parent.right
-                                anchors.left: parent.left
-                                font.pixelSize: 20
-                                horizontalAlignment: Text.AlignHCenter
-                                height : 25
-                            }
-                        }
-
-
-
-                        CxButton
-                        {
-                            id : takeForMe
-                            anchors.centerIn: parent
-                            width : 92
-                            height: 35
-                            visible : delegateCadexquis.state === "free" && mainView.iAmFree
-
-                            imageSource: "qrc:/Cadexquis/Resources/itakeit.png"
-
-                            onClicked:
-                            {
-                                var date = new Date();
-                                mainView.modelToKey(model.row,model.column,mainView.context.nickname,date.getDate() + "/" + date.getMonth() + "/" + date.getUTCFullYear(),"inprogress","");
-                            }
-                        }
-
-
-                        Column
-                        {
-                            id : uploadRelease
-
-                            width : 92
-                            height: 75
-
-                            anchors.centerIn: parent
-
-                            visible : delegateCadexquis.state === "inprogress" && model.who === mainView.context.nickname
-
-
-                            spacing: 5
-
-                            CxButton
-                            {
-                                id : upload
-                                width : parent.width
-                                height: 35
-                                imageSource: "qrc:/Cadexquis/Resources/upload.png"
-
-
-                                onClicked:
-                                {
-                                    fileDialog.currentItem = delegateCadexquis
-                                    fileDialog.open();
-
-                                }
-                            }
-
-                            CxButton
-                            {
-                                id : release
-                                width : parent.width
-                                height: 35
-                                imageSource: "qrc:/Cadexquis/Resources/release.png"
-
-
-                                onClicked:
-                                {
-                                    mainView.modelToKey(model.row,model.column,"","","free","")
-                                }
-                            }
-                        }
-                    }
+                if ( left !== null)
+                {
+                    leftId.source = documentFolder.getUrl(left.fileName);
 
                 }
+
+                if ( right !== null)
+                {
+                    rightId.source = documentFolder.getUrl(right.fileName);
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+
+    ScrollView
+    {
+
+        id : detailProgressView
+
+        anchors.top : parent.top
+        anchors.bottom : parent.bottom
+        anchors.right : parent.right
+        anchors.left : slider.right
+
+        visible : false
+
+
+        Rectangle
+        {
+
+            color : "lightGray"
+            clip : true
+            anchors.top: parent.top
+            anchors.left: parent.left
+
+            height : currentImageHeight * 1.666
+            width : currentImageWidth * 1.666
+
+            Rectangle
+            {
+                id : center
+                color : "white"
+                anchors.centerIn: parent
+                height : currentImageHeight
+                width : currentImageWidth
+
+                border.color: "black"
+                border.width: 1
+
+                CxButton
+                {
+                    width : 92
+                    height: 35
+
+                    anchors.centerIn: parent
+
+                    imageSource: "qrc:/Cadexquis/Resources/back.png"
+
+                    onClicked:
+                    {
+                        mainView.state = "gridview"
+                    }
+                }
+
+            }
+
+            Image
+            {
+                id : downId
+                anchors.top: center.bottom
+                anchors.left: center.left
+                width : currentImageWidth
+                height : currentImageHeight
+            }
+
+            Image
+            {
+                id : upId
+                anchors.bottom: center.top
+                anchors.left: center.left
+                width : currentImageWidth
+                height : currentImageHeight            }
+
+
+            Image
+            {
+                id : leftId
+                anchors.bottom: center.bottom
+                anchors.right: center.left
+                width : currentImageWidth
+                height : currentImageHeight
+            }
+
+            Image
+            {
+                id : rightId
+                anchors.bottom: center.bottom
+                anchors.left: center.right
+                width : currentImageWidth
+                height : currentImageHeight
             }
         }
+
     }
 
 
@@ -542,31 +497,10 @@ ZcAppView
             {
                 mainView.keyToModel(idItem,ceDefinition.getItem(idItem,""));
 
-                //                console.log(">> " + idItem + " " + postItDefinition.getItem(idItem,""));
-
-                //                mainView.createPostIt(idItem)
-                //                var value = postItDefinition.getItem(idItem,"");
-                //                Presenter.instance[idItem].text = value;
-                //                Presenter.instance[idItem].idItem = idItem;
-
-                //                if (Presenter.instance[idItem].text === "" ||
-                //                        Presenter.instance[idItem].text === null)
-                //                {
-                //                    var nickName = idItem.split("|");
-                //                    if (nickName.length > 0 && nickName[0] === mainView.context.nickname)
-                //                    {
-                //                        Presenter.instance[idItem].state = "edition"
-                //                    }
-                //                }
             }
             onItemDeleted :
             {
                 //                if (Presenter.instance[idItem] === undefined ||
-                //                        Presenter.instance[idItem] === null)
-                //                    return;
-                //                Presenter.instance[idItem].visible = false;
-                //                Presenter.instance[idItem].parent === null;
-                //                Presenter.instance[idItem] = null;
             }
         }
 
@@ -578,7 +512,7 @@ ZcAppView
             mainView.nbrRow = parseInt(mainView.context.applicationConfiguration.getProperty("NumberOfRow","2"));
             mainView.realImageWidth = parseFloat(mainView.context.applicationConfiguration.getProperty("PictureWidth","2"));
             mainView.realImageHeight = parseFloat(mainView.context.applicationConfiguration.getProperty("PictureHeight","2"));
-            mainView.masterNickname = mainView.context.applicationConfiguration.getProperty("PictureHeight","???");
+            mainView.masterNickname = mainView.context.applicationConfiguration.getProperty("MasterNickname","???");
 
 
             if (mainView.masterNickname === mainView.context.nickname)

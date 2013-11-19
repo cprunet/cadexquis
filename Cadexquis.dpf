@@ -62,6 +62,16 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
+            <QtResourceFile FileName="release.png">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
             <QtResourceFile FileName="upload.png">
               <Properties>
                 <BuildAction value="Compile" />
@@ -72,7 +82,17 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
-            <QtResourceFile FileName="release.png">
+            <QtResourceFile FileName="view.png">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
+            <QtResourceFile FileName="back.png">
               <Properties>
                 <BuildAction value="Compile" />
               </Properties>
@@ -103,6 +123,16 @@
       <QtResourceProjectFolder Name="Views">
         <Properties />
         <Items>
+          <Item Template="QtResourceFile">
+            <QtResourceFile FileName="CadexisGrid.qml">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
           <Item Template="QtResourceFile">
             <QtResourceFile FileName="CadexquisConfiguration.qml">
               <Properties>

@@ -5,5 +5,6 @@ OTHER_FILES += \
     Views/CadexquisConfiguration.qml \
     Tools/Tools.js \
     Views/CxButton.qml \
-    Views/SplashScreen.qml
+    Views/SplashScreen.qml \
+    Views/CadexisGrid.qml
    
