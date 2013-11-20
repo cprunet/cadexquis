@@ -199,29 +199,6 @@ ZcAppView
 
 
 
-    FileDialog
-    {
-        id: fileDialog
-
-        selectFolder : false
-        nameFilters: ["All Files(*.*)"]
-
-        property Item currentItem : null
-
-
-        onAccepted:
-        {
-            currentItem.importFile(fileDialog.fileUrl);
-            currentItem = null;
-        }
-
-        onRejected:
-        {
-            currentItem = null;
-            cancel();
-        }
-
-    }
 
 
     Label
@@ -313,31 +290,38 @@ ZcAppView
                 var posDown = (row + 1) + "_" + column;
                 var posLeft = row  + "_" + (column - 1);
                 var posRight = row  + "_" + (column + 1);
+                var posCenter = row  + "_" + column;
 
                 var up = Tools.findInListModel( modelCE , function (x) { return x.pos === posUp});
                 var down = Tools.findInListModel( modelCE , function (x) { return x.pos === posDown});
                 var left = Tools.findInListModel( modelCE , function (x) { return x.pos === posLeft});
                 var right = Tools.findInListModel( modelCE , function (x) { return x.pos === posRight});
+                var center = Tools.findInListModel( modelCE , function (x) { return x.pos === posCenter});
+
+                if ( center !== null )
+                {
+                    cellPreview.centerImage.source = documentFolder.getUrl(center.fileName);
+                }
 
                 if ( up !== null )
                 {
-                    upId.source = documentFolder.getUrl(up.fileName);
+                    cellPreview.upImage.source = documentFolder.getUrl(up.fileName);
                 }
 
                 if ( down !== null)
                 {
-                    downId.source = documentFolder.getUrl(down.fileName);
+                    cellPreview.downImage.source = documentFolder.getUrl(down.fileName);
                 }
 
                 if ( left !== null)
                 {
-                    leftId.source = documentFolder.getUrl(left.fileName);
+                    cellPreview.leftImage.source = documentFolder.getUrl(left.fileName);
 
                 }
 
                 if ( right !== null)
                 {
-                    rightId.source = documentFolder.getUrl(right.fileName);
+                    cellPreview.rightImage.source = documentFolder.getUrl(right.fileName);
 
                 }
 
@@ -346,6 +330,7 @@ ZcAppView
         }
 
     }
+
 
 
 
@@ -354,91 +339,27 @@ ZcAppView
 
         id : detailProgressView
 
-        anchors.top : parent.top
-        anchors.bottom : parent.bottom
-        anchors.right : parent.right
-        anchors.left : slider.right
+        width : cellPreview.width < parent.width ? cellPreview.width : parent.width
+        height : cellPreview.height < parent.height ? cellPreview.height : parent.height
+
 
         visible : false
 
+        anchors.centerIn: parent
 
-        Rectangle
+        CellPreview
         {
+            id : cellPreview
 
-            color : "lightGray"
-            clip : true
             anchors.top: parent.top
             anchors.left: parent.left
 
             height : currentImageHeight * 1.666
             width : currentImageWidth * 1.666
-
-            Rectangle
-            {
-                id : center
-                color : "white"
-                anchors.centerIn: parent
-                height : currentImageHeight
-                width : currentImageWidth
-
-                border.color: "black"
-                border.width: 1
-
-                CxButton
-                {
-                    width : 92
-                    height: 35
-
-                    anchors.centerIn: parent
-
-                    imageSource: "qrc:/Cadexquis/Resources/back.png"
-
-                    onClicked:
-                    {
-                        mainView.state = "gridview"
-                    }
-                }
-
-            }
-
-            Image
-            {
-                id : downId
-                anchors.top: center.bottom
-                anchors.left: center.left
-                width : currentImageWidth
-                height : currentImageHeight
-            }
-
-            Image
-            {
-                id : upId
-                anchors.bottom: center.top
-                anchors.left: center.left
-                width : currentImageWidth
-                height : currentImageHeight            }
-
-
-            Image
-            {
-                id : leftId
-                anchors.bottom: center.bottom
-                anchors.right: center.left
-                width : currentImageWidth
-                height : currentImageHeight
-            }
-
-            Image
-            {
-                id : rightId
-                anchors.bottom: center.bottom
-                anchors.left: center.right
-                width : currentImageWidth
-                height : currentImageHeight
-            }
         }
 
     }
+
 
 
     Component

@@ -19,6 +19,31 @@ Item
 
     signal showDetailProgressView(int row, int column);
 
+
+    FileDialog
+    {
+        id: fileDialogGrid
+
+        selectFolder : false
+        nameFilters: ["All Files(*.*)"]
+
+        property Item currentItem : null
+
+
+        onAccepted:
+        {
+            currentItem.importFile(fileDialog.fileUrl);
+            currentItem = null;
+        }
+
+        onRejected:
+        {
+            currentItem = null;
+            cancel();
+        }
+
+    }
+
     GridView
     {
         id : gridView
@@ -207,8 +232,8 @@ Item
                     {
                         id : whoLabel
                         anchors.right: parent.right
-                        anchors.left: parent.left
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.left: parent.left                     
+
                         font.pixelSize: 20
                         horizontalAlignment: Text.AlignHCenter
                         height : 25
@@ -224,7 +249,6 @@ Item
                         horizontalAlignment: Text.AlignHCenter
                         height : 25
                         text : model.when
-                        anchors.horizontalCenter: parent.horizontalCenter
                     }
 
 
@@ -294,8 +318,8 @@ Item
 
                         onClicked:
                         {
-                            fileDialog.currentItem = delegateCadexquis
-                            fileDialog.open();
+                            fileDialogGrid.currentItem = delegateCadexquis
+                            fileDialogGrid.open();
 
                         }
                     }
@@ -308,7 +332,7 @@ Item
                         imageSource: "qrc:/Cadexquis/Resources/view.png"
                         anchors.horizontalCenter: parent.horizontalCenter
 
-                        visible : delegateCadexquis.state === "inprogress" && model.who === mainView.context.nickname
+                        visible : (delegateCadexquis.state === "inprogress" && model.who === mainView.context.nickname) || mainView.iAmTheMaster
 
                         onClicked:
                         {

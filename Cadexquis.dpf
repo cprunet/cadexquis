@@ -52,6 +52,16 @@
         <Properties />
         <Items>
           <Item Template="QtResourceFile">
+            <QtResourceFile FileName="back.png">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
             <QtResourceFile FileName="itakeit.png">
               <Properties>
                 <BuildAction value="Compile" />
@@ -92,9 +102,11 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
-            <QtResourceFile FileName="back.png">
+            <QtResourceFile FileName="saveas.png">
               <Properties>
                 <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
               </Properties>
               <Items />
             </QtResourceFile>
@@ -189,6 +201,14 @@
                 <BuildAction value="Compile" />
                 <Locale value="" />
                 <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
+            <QtResourceFile FileName="CellPreview.qml">
+              <Properties>
+                <BuildAction value="Compile" />
               </Properties>
               <Items />
             </QtResourceFile>
