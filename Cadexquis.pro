@@ -7,5 +7,6 @@ OTHER_FILES += \
     Views/CxButton.qml \
     Views/SplashScreen.qml \
     Views/CadexisGrid.qml \
-    Views/CellPreview.qml
+    Views/CellPreview.qml \
+    Views/UploadView.qml
    

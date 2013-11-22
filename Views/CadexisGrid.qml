@@ -18,6 +18,7 @@ Item
     property alias model : gridView.model
 
     signal showDetailProgressView(int row, int column);
+    signal showUploadView(int row, int column);
 
 
     FileDialog
@@ -64,51 +65,7 @@ Item
             {
                 id : delegateCadexquis
 
-                function onResourceProgress(query,value)
-                {
-                    messageId.visible = true
-                    message = ""
 
-                    if (value === 100)
-                    {
-                        messageId.visible = false;
-                        delegateCadexquis.message = ""
-                    }
-                    else
-                    {
-                        messageId.visible = true
-                        delegateCadexquis.message = "Upload ...\n " + Math.round(value) + " %"
-                    }
-
-                }
-
-
-                function onUploadCompleted(query)
-                {
-                    messageId.visible = false
-                    delegateCadexquis.message.message = ""
-
-                    query.progress.disconnect(onResourceProgress);
-                    query.completed.disconnect(onUploadCompleted);
-
-                    modelToKey(model.row,model.column,model.who,model.when,"done",model.fileName);
-                }
-
-                function importFile(fileName)
-                {
-
-                    var index =  Tools.getIndexInListModel(modelCE, function (x) { return model.pos === x.pos})
-
-                    var query = zcStorageQueryStatusComponentId.createObject(mainView)
-                    query.progress.connect(onResourceProgress);
-                    query.completed.connect(onUploadCompleted);
-
-                    var name = mainView.context.nickname + "_" + model.pos + ".png";
-
-                    modelCE.setProperty(index, "fileName", name)
-
-                    return documentFolder.uploadFile(name,fileName,query);
-                }
 
 
                 Rectangle
@@ -318,8 +275,10 @@ Item
 
                         onClicked:
                         {
-                            fileDialogGrid.currentItem = delegateCadexquis
-                            fileDialogGrid.open();
+//                            fileDialogGrid.currentItem = delegateCadexquis
+//                            fileDialogGrid.open();
+
+                            mainGridView.showUploadView(model.row,model.column);
 
                         }
                     }

@@ -66,6 +66,7 @@ ZcAppView
                 {
                     gridView.visible = true;
                     detailProgressView.visible = false
+                    mainUploadView.visible = false
                 }}
         }
         ,
@@ -78,6 +79,21 @@ ZcAppView
                 {
                     gridView.visible = false;
                     detailProgressView.visible = true
+                    mainUploadView.visible = false
+                }}
+        }
+        ,
+        State
+        {
+            name   : "uploadview"
+
+            StateChangeScript {
+                script:
+                {
+                    gridView.visible = false;
+                    detailProgressView.visible = false
+                    mainUploadView.visible = true
+                    uploadView.start();
                 }}
         }
     ]
@@ -257,6 +273,7 @@ ZcAppView
     property bool iAmTheMaster : false
     property string myBusyPosition : ""
 
+    property alias scale : slider.value
 
     ScrollView
     {
@@ -282,48 +299,18 @@ ZcAppView
 
             model : modelCE
 
+            onShowUploadView:
+            {
+                mainView.state = "uploadview"
+                uploadView.row = row
+                uploadView.column = column
+            }
+
             onShowDetailProgressView:
             {
                 mainView.state = "detailprogressview"
 
-                var posUp = (row - 1)  + "_" + column;
-                var posDown = (row + 1) + "_" + column;
-                var posLeft = row  + "_" + (column - 1);
-                var posRight = row  + "_" + (column + 1);
-                var posCenter = row  + "_" + column;
-
-                var up = Tools.findInListModel( modelCE , function (x) { return x.pos === posUp});
-                var down = Tools.findInListModel( modelCE , function (x) { return x.pos === posDown});
-                var left = Tools.findInListModel( modelCE , function (x) { return x.pos === posLeft});
-                var right = Tools.findInListModel( modelCE , function (x) { return x.pos === posRight});
-                var center = Tools.findInListModel( modelCE , function (x) { return x.pos === posCenter});
-
-                if ( center !== null )
-                {
-                    cellPreview.centerImage.source = documentFolder.getUrl(center.fileName);
-                }
-
-                if ( up !== null )
-                {
-                    cellPreview.upImage.source = documentFolder.getUrl(up.fileName);
-                }
-
-                if ( down !== null)
-                {
-                    cellPreview.downImage.source = documentFolder.getUrl(down.fileName);
-                }
-
-                if ( left !== null)
-                {
-                    cellPreview.leftImage.source = documentFolder.getUrl(left.fileName);
-
-                }
-
-                if ( right !== null)
-                {
-                    cellPreview.rightImage.source = documentFolder.getUrl(right.fileName);
-
-                }
+                cellPreview.updateCellView(row,column)
 
             }
 
@@ -331,7 +318,37 @@ ZcAppView
 
     }
 
+    ScrollView
+    {
+        id : mainUploadView
 
+        anchors.top : parent.top
+        anchors.bottom : parent.bottom
+        anchors.right : parent.right
+        anchors.left : slider.right
+
+        visible : false
+
+
+        UploadView
+        {
+            id : uploadView
+
+            state : "select"
+
+            anchors.top: parent.top
+            anchors.left: parent.left
+
+            width : imageSourceSize.width * slider.value
+            height : imageSourceSize.height * slider.value
+
+            onCancel:
+            {
+                mainView.state = "gridview"
+            }
+        }
+
+    }
 
 
     ScrollView
@@ -351,11 +368,17 @@ ZcAppView
         {
             id : cellPreview
 
+            saveAsVisible: true
+            okVisible: false
+
             anchors.top: parent.top
             anchors.left: parent.left
 
             height : currentImageHeight * 1.666
             width : currentImageWidth * 1.666
+
+            onCancel: mainView.state = "gridview"
+
         }
 
     }
