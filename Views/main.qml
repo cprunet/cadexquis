@@ -24,7 +24,7 @@ ZcAppView
         Action {
             id: closeAction
             shortcut: "Ctrl+X"
-            iconSource: "qrc:/ZcPostIt/Resources/close.png"
+            iconSource: "qrc:/Cadexquis/Resources/close.png"
             tooltip : "Close Aplication"
             onTriggered:
             {
@@ -216,15 +216,17 @@ ZcAppView
 
 
 
+    Rectangle
+    {
+        color : "black"
+        anchors.fill: sliderValue
+
+        radius : 3
+    }
+
 
     Label
     {
-        Rectangle
-        {
-            color : "black"
-            opacity : 0.5
-            anchors.fill: parent
-        }
 
         id : sliderValue
         width : 40

@@ -62,6 +62,16 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
+            <QtResourceFile FileName="cancel.png">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
             <QtResourceFile FileName="itakeit.png">
               <Properties>
                 <BuildAction value="Compile" />
@@ -72,7 +82,27 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
+            <QtResourceFile FileName="ok.png">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
             <QtResourceFile FileName="release.png">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
+            <QtResourceFile FileName="saveas.png">
               <Properties>
                 <BuildAction value="Compile" />
                 <Locale value="" />
@@ -102,25 +132,7 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
-            <QtResourceFile FileName="saveas.png">
-              <Properties>
-                <BuildAction value="Compile" />
-                <Locale value="" />
-                <Alias value="" />
-              </Properties>
-              <Items />
-            </QtResourceFile>
-          </Item>
-          <Item Template="QtResourceFile">
-            <QtResourceFile FileName="cancel.png">
-              <Properties>
-                <BuildAction value="Compile" />
-              </Properties>
-              <Items />
-            </QtResourceFile>
-          </Item>
-          <Item Template="QtResourceFile">
-            <QtResourceFile FileName="ok.png">
+            <QtResourceFile FileName="close.png">
               <Properties>
                 <BuildAction value="Compile" />
               </Properties>
@@ -182,6 +194,16 @@
             </QtResourceFile>
           </Item>
           <Item Template="QtResourceFile">
+            <QtResourceFile FileName="CellPreview.qml">
+              <Properties>
+                <BuildAction value="Compile" />
+                <Locale value="" />
+                <Alias value="" />
+              </Properties>
+              <Items />
+            </QtResourceFile>
+          </Item>
+          <Item Template="QtResourceFile">
             <QtResourceFile FileName="CxButton.qml">
               <Properties>
                 <BuildAction value="Compile" />
@@ -213,16 +235,6 @@
           </Item>
           <Item Template="QtResourceFile">
             <QtResourceFile FileName="SplashScreen.qml">
-              <Properties>
-                <BuildAction value="Compile" />
-                <Locale value="" />
-                <Alias value="" />
-              </Properties>
-              <Items />
-            </QtResourceFile>
-          </Item>
-          <Item Template="QtResourceFile">
-            <QtResourceFile FileName="CellPreview.qml">
               <Properties>
                 <BuildAction value="Compile" />
                 <Locale value="" />

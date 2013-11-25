@@ -4,7 +4,7 @@
     <a:ZeeapManifestMetaData>
       <a:ZeeapManifestMetaData.AppName>Cadexquis</a:ZeeapManifestMetaData.AppName>
       <a:ZeeapManifestMetaData.Author>ZeeCrowd</a:ZeeapManifestMetaData.Author>
-      <a:ZeeapManifestMetaData.Version>101</a:ZeeapManifestMetaData.Version>
+      <a:ZeeapManifestMetaData.Version>102</a:ZeeapManifestMetaData.Version>
       <a:ZeeapManifestMetaData.Url>htpp://</a:ZeeapManifestMetaData.Url>
       <a:ZeeapManifestMetaData.AppConfig>Cadexquis.cfg</a:ZeeapManifestMetaData.AppConfig>
     </a:ZeeapManifestMetaData>
